@@ -58,7 +58,7 @@ The EFI executable file is generated at <edk2_path>/Build/Shell/DEBUG\_GCC5/RISC
 
 ### Qemu Model of the Server SoC Reference Machine
 
-Right now around 40% testcase failed or skipped due to current the generic virtual platform **virt** lacks the required models in Server SoC, e.g., RCiEP devices. We need a more realistic server SoC reference machine in qemu. This would not only benefit the SoC testsuite, but also a good reference model for SoC and firmware development.
+Right now around 40% testcase failed or skipped due to the generic virtual platform **virt** lacks the required models in Server SoC, e.g., RCiEP devices. We need a more realistic server SoC reference machine in qemu. This would not only benefit the SoC testsuite, but also a good reference model for SoC and firmware development.
 
 ### EDK II for the Server SoC Reference Machine
 
