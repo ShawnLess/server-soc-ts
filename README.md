@@ -19,6 +19,7 @@ Along with the Server SoC Spec, there is a test spec which defines a set of test
 |  Repos    |   URL                                |   tag                    |
 | -------   |  ----------------------------------- |  ---------------------   |
 | edk2      | https://github.com/tianocore/edk2    |  edk2-stable202405       |
+| qemu      | https://github.com/qemu/qemu.git     |  v9.0.2                  |
 
 
 ## Compile Server SoC TestSuite
@@ -51,9 +52,33 @@ Along with the Server SoC Spec, there is a test spec which defines a set of test
 3.  source edksetup.sh
 4.  make -C BaseTools/Source/C
 5.  source ShellPkg/Application/server-soc-ts/tools/scripts/acsbuild.sh
-
 The EFI executable file is generated at <edk2_path>/Build/Shell/DEBUG\_GCC5/RISCV64/Bsa.efi
 
+### 4. Run the TestSuite under UEFI
+1.  Build EDK2 RISC-V QEMU virt platform as described in [EDK2 Support for RISC-V QEMU virt platform](https://github.com/tianocore/edk2/tree/master/OvmfPkg/RiscVVirt).
+2.  Package Bsa.efi into a disk image.
+    ```
+    dd if=/dev/zero of=disk.img bs=1M count=128
+    mformat -i disk.img -t 4096 -h 64 -s 32 -F Z:
+    mcopy -i disk.img -s ./Build/Shell/DEBUG_GCC5/RISCV64/Bsa.efi  ::/
+    ```
+3.  Mount disk.img as a drive in RISC-V QEMU virt platform.
+    ```
+    $QEMU_INSTALL/bin/qemu-system-riscv64 \
+            -machine virt,aia=aplic-imsic,pflash0=pflash0,pflash1=pflash1 \
+            ...
+            -drive file=./disk.img,format=raw,if=virtio
+    ```
+4.  Boot to UEFI Shell and run Bsa.efi to start the test suite.
+
+## Current Test Result
+Refer test_result/riscv_qemu_virt.md for EDK2 RISC-V QEMU virt platform test result.
+
+    Status:
+    * TBI - To be implemented，means a test is feasible in UEFI ACPI PAL but not implemented.
+    * NA - Not applicable，means no test is needed\
+    * Blocked - Test (or test result confirm) is blocked due to QEMU/FW/OS issue or missing features.
+    * Pending - Need further investigation
 ## Next Steps
 
 ### Qemu Model of the Server SoC Reference Machine
